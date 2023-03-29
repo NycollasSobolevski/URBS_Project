@@ -47,10 +47,13 @@ card_data = driver.find_element(by=By.XPATH, value='/html/body/center/table/tbod
 card_data2 = driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr[7]/td/div/center/form/table/tbody/tr[6]/td/table/tbody/tr[3]/td[2]')
 user_cash = float(card_data.text.removeprefix('R$ ').removesuffix(' *').replace(',','.'))
 commom_cash = float(card_data2.text.removeprefix('R$ ').removesuffix(' *').replace(',','.'))
-print(commom_cash,user_cash)
+# print(commom_cash,user_cash)
 
-print(f"Passagens disoniveis:  {(int(commom_cash/pass_price) + int(user_cash/6))}")
+# print(f"Passagens disoniveis:  {(int(commom_cash/pass_price) + int(user_cash/6))}")
 
-
+#acessando historico de uso
+#TODO: completar
+table = driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr[7]/td/div/center/form/table/tbody/tr[11]/td/table/tbody/tr[2]/td/div/table/tbody')
+print(table)
 
 # time.sleep(5)
