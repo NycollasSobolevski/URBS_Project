@@ -9,6 +9,7 @@ opt = webdriver.ChromeOptions()
 opt.add_argument("--headless")
 
 driver = webdriver.Chrome(chrome_options=opt)
+# driver = webdriver.Chrome()
 
 
 driver.get("https://sbe.curitiba.pr.gov.br/sbe-web/login/login.html")
@@ -21,6 +22,7 @@ fechar_comunicado = driver.find_element(by=By.XPATH, value="/html/body/div[2]/ta
 
 user_login = secretos.login
 user_pass = secretos.senha
+#preco da passagem
 pass_price = 6.00
 
 login = driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr/td/center/form/div/div[2]/div[1]/ul/li[1]/span[1]/input')
@@ -53,7 +55,32 @@ commom_cash = float(card_data2.text.removeprefix('R$ ').removesuffix(' *').repla
 
 #acessando historico de uso
 #TODO: completar
-table = driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr[7]/td/div/center/form/table/tbody/tr[11]/td/table/tbody/tr[2]/td/div/table/tbody')
-print(table)
 
-# time.sleep(5)
+table = driver.find_elements(by=By.CLASS_NAME, value='reportResultNew')
+while len(table) <= 0:
+    table = driver.find_elements(by=By.CLASS_NAME, value='reportResultNew')
+    print('searching')
+    time.sleep(0.5)
+
+table = table[0].find_element(by=By.TAG_NAME, value='tbody').text
+table = table.split('\n')
+
+# print(table[len(table) - 1])
+for i in range(len(table)):
+    table[i] = table[i].replace(' -','').split(' ')
+for i in table:
+    print(i)
+
+# for i in table:
+#     if 'Débito' in i:
+#         operation = 'Débito'
+#     elif 'Transferência' in i:
+#         operation = 'Transferido'
+#     elif 'Carga' in i:
+#         operation = 'Carga'
+#     date = i[:20]
+    
+#     print(date,operation)
+        
+
+time.sleep(5)
