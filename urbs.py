@@ -1,8 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+from datetime import date
 import time
-import secretos
+import date as dt
+from Palavras_secretas import secretos
 
 
 #argumentos para iniciar a tela minimizada
@@ -52,7 +54,6 @@ def init(user):
     driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr[7]/td/div/center/form/table/tbody/tr[4]/td/input').click()
     return driver
 
-
 def saldo(user):
     driver = init(user)
     #preco da passagem
@@ -69,6 +70,17 @@ def saldo(user):
 
 def historico(user):
     driver = init(user)
+
+    name = driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr[7]/td/div/center/form/table/tbody/tr[1]/td[2]').text
+    # Selecionando a data do mes a ser pesquisado
+    dates = dt.dates()
+    print(dates)
+    driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr[7]/td/div/center/form/table/tbody/tr[11]/td/table/tbody/tr[1]/td/table/tbody/tr[1]/td[2]/input[1]').clear()
+    driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr[7]/td/div/center/form/table/tbody/tr[11]/td/table/tbody/tr[1]/td/table/tbody/tr[1]/td[2]/input[1]').send_keys(dates[0])
+    driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr[7]/td/div/center/form/table/tbody/tr[11]/td/table/tbody/tr[1]/td/table/tbody/tr[1]/td[2]/input[2]').clear()
+    driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr[7]/td/div/center/form/table/tbody/tr[11]/td/table/tbody/tr[1]/td/table/tbody/tr[1]/td[2]/input[2]').send_keys(dates[1])
+    driver.find_element(by=By.XPATH,value='/html/body/center/table/tbody/tr[7]/td/div/center/form/table/tbody/tr[11]/td/table/tbody/tr[1]/td/table/tbody/tr[2]/td/input').click()
+    
     table = driver.find_elements(by=By.CLASS_NAME, value='reportResultNew')
     while len(table) <= 0:
         table = driver.find_elements(by=By.CLASS_NAME, value='reportResultNew')
@@ -77,18 +89,17 @@ def historico(user):
 
     table = table[0].find_element(by=By.TAG_NAME, value='tbody').text
     table = table.split('\n')
-
-    name = driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr[7]/td/div/center/form/table/tbody/tr[1]/td[2]').text
-
-    for i in range(len(table)):
-        table[i] = table[i].replace(' -','').split(' ')
-    # for i in table:
-    #     print(i)
-    return table, name
+    
+    newtable = ''
+    for i in table:
+        newtable = newtable + f'{i}\n'
+    return name, newtable
     
 
-
+# Test area
 #MAIN
 # init('13303655936')
-# print(saldo('13303655936'))
-# print(historico('11370672926'))
+# hey = historico('13303655936')
+# for i in hey:
+#     print(i)
+#     print('\n')

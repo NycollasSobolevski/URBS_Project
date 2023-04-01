@@ -1,58 +1,55 @@
 import telebot
-import secretos
 import urbs
+from Palavras_secretas import secretos
 
-bot = telebot.TeleBot(secretos.api_key)
-resposta = ''
+CHAVE_API = secretos.api_key
 
-def apel(bot, update):
-    msg = update.message.reply_text('Qual o seu apelido?')
-    bot.register_next_step_handler(msg, nome_de_uma_funcao)
-    bot.send_message(chat_id = update.message.chat_id, text = f"Uau, seu apelido é {resposta}" )
+bot = telebot.TeleBot(CHAVE_API)
 
+@bot.message_handler(commands=['start', 'help'])
+def send_welcome(message):
+	bot.reply_to(message, """
+    O que deseja hoje?
+    /saldo     - Consultar Saldo
+    /historico - Consultar Historico
+    """)
 
-def nome_de_uma_funcao(message):
-# Guardando a resposta do usuario em uma variavel
-    resposta = message.text
-    print(resposta)
-cpf =''
-@bot.message_handler(commands=["opcao1"])
-def Saldo(mensagem):
-    bot.send_message(mensagem.chat.id, f"Digite seu CPF")
-
-
-    # aprender como receber uma mensagem
-    #TODO: 1puxar funcao de consultar saldo
-    if secretos.certify_cpf(cpf):
-        saldo = urbs.saldo(cpf)
-        bot.send_message(mensagem.chat.id, f"{saldo[len(saldo)-1]} seu saldo é de {saldo[:3]}")
-    else:
-        bot.send_message(mensagem.chat.id, f"CPF invalido no banco de dados, digite novamente ou contate o ADMIN")
-
-
-def Save_cpf(message):
-  # Guardando a resposta do usuario em uma variavel
-  cpf = message.text
-
+@bot.message_handler(commands=['saldo'])
+def saldo(message):
+    bot.reply_to(message,'Insira seu CPF:')
+    @bot.message_handler(func=lambda m:True)
+    def consulta_S(message):
+        if secretos.certify_cpf(message.text):
+            resposta = urbs.saldo(message.text)
+            resposta = f'''
+            {resposta[3]}
+            Saldo Usuario: {resposta[0]}
+            Saldo Comum: {resposta[1]}
+            Total de passagens: {resposta[2]}
+            '''
+            bot.reply_to(message,resposta)
+        else:
+            bot.reply_to(message,'CPF invalido!\n Digite outro ou contate o ADM')
+            
 
 
+@bot.message_handler(commands=['historico'])
+def historic(message):
+    bot.reply_to(message,'Insira seu CPF:')
+    @bot.message_handler(func=lambda m:True)
+    def consulta_H(message):
+        if secretos.certify_cpf(message.text):
+            resposta = urbs.historico(message.text)
+            resposta = f'''
+            {resposta[0]}
+            {resposta[1]}'''
+            bot.reply_to(message,resposta)
+        else:
+            bot.reply_to(message,'CPF invalido!\n Digite outro ou contate o ADM')
+             
+        
 
-@bot.message_handler(commands=['opcao2'])
-def Historico(msg):
-    #TODO: puxar funcao de consultar saldo
-    bot.send_message(msg.chat.id, f"[name] seu Historico: [historico]")
 
-def verify(msg):
-    return True
 
-@bot.message_handler(func=verify)
-def responder(msg):
-    text = """
-    Escolha uma opção para continuar (Clique no item):
-     /opcao1 - Consultar saldo
-     /opcao2 - Consultar Historico
-    Responder qualquer outra coisa não vai funcionar, clique em uma das opções
-    """
-    bot.reply_to(msg,text)
 
-bot.polling()
+bot.infinity_polling()

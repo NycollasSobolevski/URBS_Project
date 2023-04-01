@@ -1,3 +1,4 @@
 [ ] organizar urbs
 [ ] funcionar bot 
-[ ] functions que retorne dados no urbs.py
+[x] functions que retorne dados no urbs.py
+[ ] debug bot (quando manda texto aleatorio)
