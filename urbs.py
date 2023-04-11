@@ -4,7 +4,7 @@ from selenium.webdriver.support.ui import Select
 from datetime import date
 import time
 import date as dt
-from Palavras_secretas import secretos
+from Secrets import secretos
 
 
 #argumentos para iniciar a tela minimizada
