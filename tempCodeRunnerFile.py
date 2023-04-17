@@ -1,2 +1,0 @@
-  saldo = False
-    history = True

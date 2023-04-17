@@ -1,5 +1,5 @@
 import telebot
-import urbs
+import urbs as urbs
 from Secrets import secretos
 
 CHAVE_API = secretos.api_key

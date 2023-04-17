@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from datetime import date
 import time
-import date as dt
+from URBS import date as dt
 from Secrets import secretos
 
 
@@ -23,9 +23,11 @@ def init(user):
     driver = webdriver.Chrome(chrome_options=opt)
 
     driver.get("https://sbe.curitiba.pr.gov.br/sbe-web/login/login.html")
-    driver.fullscreen_window
-    driver.remove_all_credentials
-    driver.delete_cookie
+    # driver.remove_all_credentials
+    # driver.delete_cookie
+
+    print("--------------- arquivo aberto")
+
     try:
         driver.find_element(by=By.XPATH, value="/html/body/div[2]/table[2]/tbody/tr/td[2]/div/div[2]/input").click()
     except:
@@ -103,3 +105,4 @@ def historico(user):
 # for i in hey:
 #     print(i)
 #     print('\n')
+# print(saldo('12494999928'))
