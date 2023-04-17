@@ -1,3 +1,2 @@
-/Secrets
-/__pycache__
-test.py
+/Secrets 
+*__pycache__
