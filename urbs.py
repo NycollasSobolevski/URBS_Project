@@ -98,7 +98,7 @@ def historico(user):
     return name, newtable
     
 
-# Test area
+# --------------  Test area  ---------------
 #MAIN
 # init('13303655936')
 # hey = historico('13303655936')
@@ -106,3 +106,4 @@ def historico(user):
 #     print(i)
 #     print('\n')
 # print(saldo('12494999928'))
+# --------------------------------------------
