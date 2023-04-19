@@ -73,17 +73,19 @@ def timeSearch(value):
 def UpdateDB():
     linhas = db.search('linhas')
     # listapagina = timeSearch(linhas[0][1])
-    listapagina = timeSearch('231')
+    for j in linhas:
+        listapagina = timeSearch(j[1])
 
-    for i in range(len(listapagina)):
-        data = listapagina[i].split('\n')
-        ponto = data[0]
-        dia = data[2]
-        horario = data[3:(len(data)-1)]
-        print(f" \n {ponto}\n {dia}\n {horario}")
-        for i in horario:
-            #TODO:adicionar no banco de dados os dados
-            print()
+        for i in range(len(listapagina)):
+            data = listapagina[i].split('\n')
+            ponto = data[0]
+            dia = data[2]
+            horario = data[3:(len(data)-1)]
+            # print(f" \n {str(ponto)}\n {dia}\n {horario}")
+            for i in horario:
+                #TODO:adicionar no banco de dados os dados
+                db.insert('horario', f"'{str(ponto)}','{dia}','{i}',{j[0]}")
+                print()
 
 
 

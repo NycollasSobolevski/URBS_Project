@@ -16,9 +16,17 @@ create table horario(
 -- drop table horario
 -- drop table linhas
 
+-- ------------------------ testes ---------------------------
+
+select horario.horario, horario.tipo_dia, horario.ponto from horario join linhas on horario.id_linha = linhas.id 
+where linhas.identificacao = '231'
+
+select * from linhas
+select count(*) from horario
 
 select * from linhas;
 select * from horario
 select * from linhas where identificacao = '231'
 select * from linhas where nome like '%BOQUEIRÃO%'
 insert into linhas values ('X03','Banestado/california')
+-- ------------------------ testes ---------------------------
