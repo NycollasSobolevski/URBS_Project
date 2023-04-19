@@ -2,8 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 import time
-
 import DB as db
+
 def init():
     # Abrindo o txt, se caso ele nao existir iremos criar um
     # try:
@@ -68,6 +68,24 @@ def timeSearch(value):
 #     print(i[1] + " - " + i[0])
 #     db.insert('linhas',f"'{str(i[1])}','{str(i[0])}'")
 
-# print(SearchLinhas())
-times = timeSearch('231')
-print(times[0])
+
+# Funcao que atualiza o banco de dados nos horarios
+def UpdateDB():
+    linhas = db.search('linhas')
+    # listapagina = timeSearch(linhas[0][1])
+    listapagina = timeSearch('231')
+
+    for i in range(len(listapagina)):
+        data = listapagina[i].split('\n')
+        ponto = data[0]
+        dia = data[2]
+        horario = data[3:(len(data)-1)]
+        print(f" \n {ponto}\n {dia}\n {horario}")
+        for i in horario:
+            #TODO:adicionar no banco de dados os dados
+            print()
+
+
+
+
+UpdateDB()
