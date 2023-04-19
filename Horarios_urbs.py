@@ -13,9 +13,9 @@ def init():
     #     txt = open("data/Linhas_de_Onibus.txt","w")
 
     #config do webdriver
-    Coptions = webdriver.ChromeOptions()
-    Coptions.add_argument("--headless")
-    driver = webdriver.Chrome()
+
+    driver = webdriver.Chrome()     #abrindo navegador 
+    driver.minimize_window()        # minimizando janela
 
     url = 'https://www.urbs.curitiba.pr.gov.br/horario-de-onibus'
     driver.get(url)
@@ -48,13 +48,15 @@ def SearchLinhas():
         linhasOnibus[i][1] = linhasOnibus[i][1].replace(']','')
     return linhasOnibus
 
-def timeSearch(value):
-    driver = init()
-    slct = Select(driver.find_element(by=By.ID, value='compHritLinha'))
-    slct.select_by_value(str(value))
+#Funcao que procura os horarios de determinado onibus 'value' é o codigo da linha do mesmo
+def timeSearch(value, driver):
+    # Localizando o select da pagina  que responde a linha de onibus e selecionando a linha escolhida
+    slct = Select(driver.find_element(by=By.ID, value='compHritLinha')).select_by_value(str(value))
+    # localizando o select que responde ao tipo de dia e selecionando o tipo 'TODOS'
     Select(driver.find_element(by=By.ID, value='compHritDia')).select_by_visible_text("TODOS")
+    # enviando os dados do select 
     driver.find_element(by=By.XPATH,value='/html/body/div[3]/div/div[2]/div[1]/div/div/div[1]/input').click()
-    print("selected")
+    # pegando a tabela que contenha os horarios da linha selecionada
     horarios = driver.find_elements(by=By.CLASS_NAME,value='bg-white')
     
     result = []
@@ -63,31 +65,22 @@ def timeSearch(value):
 
     return result
 
-# #Adicionando no Database
-# for i in linhasOnibus:
-#     print(i[1] + " - " + i[0])
-#     db.insert('linhas',f"'{str(i[1])}','{str(i[0])}'")
-
-
-# Funcao que atualiza o banco de dados nos horarios
+# Funcao que da insert no banco de dados de horarios
 def UpdateDB():
+    #abre o navegador
+    driver = init()
+    #procura todas as linhas de onibus disponiveis no DB
     linhas = db.search('linhas')
-    # listapagina = timeSearch(linhas[0][1])
     for j in linhas:
-        listapagina = timeSearch(j[1])
+        #pesquisa o horario pelo código da linha de onibus de acordo com o banco 
+        listapagina = timeSearch(j[1], driver)
 
         for i in range(len(listapagina)):
-            data = listapagina[i].split('\n')
-            ponto = data[0]
-            dia = data[2]
-            horario = data[3:(len(data)-1)]
+            data = listapagina[i].split('\n')   #separando os dados recebidos do site
+            ponto = data[0]                     #ponto do onibus
+            dia = data[2]                       #tipo de dia (DIA UTIL, SABADO ou DOMINGO)
+            horario = data[3:(len(data)-1)]     #Horario 
             # print(f" \n {str(ponto)}\n {dia}\n {horario}")
             for i in horario:
-                #TODO:adicionar no banco de dados os dados
                 db.insert('horario', f"'{str(ponto)}','{dia}','{i}',{j[0]}")
                 print()
-
-
-
-
-UpdateDB()

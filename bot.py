@@ -1,6 +1,8 @@
 import telebot
 import urbs as urbs
 from Secrets import secretos
+import DB
+
 
 CHAVE_API = secretos.api_key
 
@@ -14,7 +16,22 @@ def send_welcome(message):
     O que deseja hoje?
     /saldo     - Consultar Saldo
     /historico - Consultar Historico
+    /horario   - Consultar Horario de Onibus
     """)
+
+
+@bot.message_handler(commands=['horario'])
+def line_list(message):
+    print("horarios")
+    linhas = DB.search('linhas')
+    result = ""
+    for i in range(len(linhas)):
+        if i % 50 == 0 and i != 0:
+            bot.reply_to(message,result)
+            result = ""
+        result += f"/{linhas[i][1]} - {linhas[i][2]}\n"
+    bot.reply_to(message,result)
+
 
 @bot.message_handler(commands=['saldo'])
 def saldo(message):
@@ -36,9 +53,6 @@ def saldo(message):
                 bot.reply_to(message,'CPF invalido!\n Digite outro ou contate o ADM')
             pesquisaHistorico = False
             pesquisaSaldo = False
-
-            
-                
 
 
 @bot.message_handler(commands=['historico'])

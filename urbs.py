@@ -7,7 +7,7 @@ from URBS import date as dt
 from Secrets import secretos
 
 
-#argumentos para iniciar a tela minimizada
+# Funcao que procura o usuario no banco
 def search_user(id):
     users = secretos.users
     user =''
@@ -17,10 +17,10 @@ def search_user(id):
     return user
 
 def init(user):
-    
+    # config do webdriver para nao abrir janela 
     opt = webdriver.ChromeOptions()
     opt.add_argument("--headless")
-    driver = webdriver.Chrome(chrome_options=opt)
+    driver = webdriver.Chrome(chrome_options=opt)   #abrindo o driver
 
     driver.get("https://sbe.curitiba.pr.gov.br/sbe-web/login/login.html")
     # driver.remove_all_credentials
@@ -36,13 +36,14 @@ def init(user):
     user_login = user[0]
     user_pass = user[1]
 
+    # inserindo login e senha do usuario
     login = driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr/td/center/form/div/div[2]/div[1]/ul/li[1]/span[1]/input')
     login = login.send_keys(user_login)
     passw = driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr/td/center/form/div/div[2]/div[1]/ul/li[1]/span[2]/input')
     passw = passw.send_keys(user_pass)
     enter = driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr/td/center/form/div/div[2]/div[1]/ul/li[2]/input')
     enter.click()
-
+    # 
     action = driver.find_element(by=By.XPATH, value='/html/body/center/table/tbody/tr[7]/td/div/center/table[2]/tbody/tr/td[1]/div[2]/div/p[2]/a')
     action.click()
 
